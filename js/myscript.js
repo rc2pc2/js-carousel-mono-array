@@ -27,14 +27,9 @@ const thumbnailslement = document.querySelector('div.thumbnails');
 
 let activeIndex = 3;
 let hasCarouselStarted = false;
-
 let autoplayInterval = false;
-// let isAutoplayActive = true;
 let isAutoplayForward = true;
 
-
-// ? cerco l'elemento su cui iterare => imagesList
-// ? cerco di capire quante variabili mi servono => imageElement
 imagesList.forEach(( imageElement, index ) => {
     carouselElement.innerHTML +=
     `<div class="carousel-item">
@@ -77,6 +72,32 @@ nextButton.addEventListener('click', function(){
 });
 
 
+const startButtonElement = document.getElementById('start-button');
+const stopButtonElement = document.getElementById('stop-button');
+const invertButtonElement = document.getElementById('invert-button');
+
+startButtonElement.addEventListener('click', function(){
+    // ? se non è già attivo, attiva l'autoplay
+    if ( !autoplayInterval ){
+        autoplayInterval = setInterval(function(){
+            activeIndex = updateSlide(activeIndex, imagesList.length, isAutoplayForward);
+        }, 3000)
+    }
+});
+
+stopButtonElement.addEventListener('click', function(){
+    // ? se è già attivo, disattiva l'autoplay
+    if ( autoplayInterval ){
+        clearInterval(autoplayInterval);
+        autoplayInterval = false;
+    }
+});
+
+invertButtonElement.addEventListener('click', function(){
+    // ? inverti l'ordine dell'autolpay
+    isAutoplayForward = !isAutoplayForward;
+});
+
 
 function updateSlide(currentActiveIndex , slidesNumber, isNext){
     if (!isNext){
@@ -111,29 +132,3 @@ function goToSlide(slideIndex){
 }
 
 
-const startButtonElement = document.getElementById('start-button');
-startButtonElement.addEventListener('click', function(){
-    // ? se non è già attivo, attiva l'autoplay
-    if ( !autoplayInterval ){
-        autoplayInterval = setInterval(function(){
-            activeIndex = updateSlide(activeIndex, imagesList.length, isAutoplayForward);
-        }, 3000)
-    }
-});
-
-const stopButtonElement = document.getElementById('stop-button');
-
-stopButtonElement.addEventListener('click', function(){
-    // ? se è già attivo, disattiva l'autoplay
-    if ( autoplayInterval ){
-        clearInterval(autoplayInterval);
-        autoplayInterval = false;
-    }
-});
-
-
-const invertButtonElement = document.getElementById('invert-button');
-invertButtonElement.addEventListener('click', function(){
-    // ? inverti l'ordine dell'autolpay
-    isAutoplayForward = !isAutoplayForward;
-});
