@@ -31,6 +31,7 @@ div.carousel{
     position: relative;
     width: 80%;
     border: 3px solid black;
+    background-color: black;
 }
 
 div.previous-button,
@@ -68,8 +69,11 @@ div.next-button{
 }
 
 div.carousel .carousel-item{
-    height: 0;
-    width: 0;
+    /* display: none; */
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
 }
 
 div.carousel .carousel-item div.item-info{
@@ -77,9 +81,10 @@ div.carousel .carousel-item div.item-info{
 }
 
 div.carousel .carousel-item.active{
-    width: 100%;
-    height: 100%;
+    display: block;
+    opacity: 1;
     position: relative;
+    transition: opacity .75s ease-out;
 }
 
 /* div.carousel .carousel-item.active img{
