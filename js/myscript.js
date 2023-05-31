@@ -77,7 +77,6 @@ const stopButtonElement = document.getElementById('stop-button');
 const invertButtonElement = document.getElementById('invert-button');
 
 startButtonElement.addEventListener('click', function(){
-    // ? se non è già attivo, attiva l'autoplay
     if ( !autoplayInterval ){
         autoplayInterval = setInterval(function(){
             activeIndex = updateSlide(activeIndex, imagesList.length, isAutoplayForward);
@@ -86,7 +85,6 @@ startButtonElement.addEventListener('click', function(){
 });
 
 stopButtonElement.addEventListener('click', function(){
-    // ? se è già attivo, disattiva l'autoplay
     if ( autoplayInterval ){
         clearInterval(autoplayInterval);
         autoplayInterval = false;
@@ -94,11 +92,13 @@ stopButtonElement.addEventListener('click', function(){
 });
 
 invertButtonElement.addEventListener('click', function(){
-    // ? inverti l'ordine dell'autolpay
     isAutoplayForward = !isAutoplayForward;
 });
 
-
+/**
+ * Goes to the next or the previous slide based on the arguments given
+ * @returns the new active index
+ */
 function updateSlide(currentActiveIndex , slidesNumber, isNext){
     if (!isNext){
         if (currentActiveIndex == 0 ) {
@@ -118,6 +118,10 @@ function updateSlide(currentActiveIndex , slidesNumber, isNext){
     return currentActiveIndex;
 }
 
+/**
+ * Goes to the slide with the given index
+ * @param slideIndex The index of the slide to be activated on both the carousel and the thumbnails
+ */
 function goToSlide(slideIndex){
 
     if ( hasCarouselStarted )
