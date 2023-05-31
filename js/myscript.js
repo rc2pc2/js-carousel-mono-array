@@ -28,6 +28,11 @@ const thumbnailslement = document.querySelector('div.thumbnails');
 let activeIndex = 3;
 let hasCarouselStarted = false;
 
+let autoplayInterval = false;
+// let isAutoplayActive = true;
+let isAutoplayForward = true;
+
+
 // ? cerco l'elemento su cui iterare => imagesList
 // ? cerco di capire quante variabili mi servono => imageElement
 imagesList.forEach(( imageElement, index ) => {
@@ -63,27 +68,34 @@ hasCarouselStarted = true;
 
 const prevButton = document.querySelector('div.previous-button');
 prevButton.addEventListener('click', function(){
-    if (activeIndex == 0 ) {
-        activeIndex = imagesList.length - 1;
-    } else {
-        activeIndex = activeIndex - 1;
-    }
-
-    goToSlide(activeIndex);
-
+    activeIndex = updateSlide(activeIndex, imagesList.length, false);
 });
 
 const nextButton = document.querySelector('div.next-button');
 nextButton.addEventListener('click', function(){
-    if (activeIndex == imagesList.length - 1 ) {
-        activeIndex = 0;
-    } else {
-        activeIndex = activeIndex + 1;
-    }
-
-    goToSlide(activeIndex);
+    activeIndex = updateSlide(activeIndex, imagesList.length, true);
 });
 
+
+
+function updateSlide(currentActiveIndex , slidesNumber, isNext){
+    if (!isNext){
+        if (currentActiveIndex == 0 ) {
+            currentActiveIndex = slidesNumber - 1;
+        } else {
+            currentActiveIndex = currentActiveIndex - 1;
+        }
+    } else {
+        if (currentActiveIndex == slidesNumber - 1 ) {
+            currentActiveIndex = 0;
+        } else {
+            currentActiveIndex = currentActiveIndex + 1;
+        }
+    }
+
+    goToSlide(currentActiveIndex);
+    return currentActiveIndex;
+}
 
 function goToSlide(slideIndex){
 
@@ -97,3 +109,31 @@ function goToSlide(slideIndex){
 
     document.querySelectorAll('div.thumbnail-item')[slideIndex].classList.add('active');
 }
+
+
+const startButtonElement = document.getElementById('start-button');
+startButtonElement.addEventListener('click', function(){
+    // ? se non è già attivo, attiva l'autoplay
+    if ( !autoplayInterval ){
+        autoplayInterval = setInterval(function(){
+            activeIndex = updateSlide(activeIndex, imagesList.length, isAutoplayForward);
+        }, 3000)
+    }
+});
+
+const stopButtonElement = document.getElementById('stop-button');
+
+stopButtonElement.addEventListener('click', function(){
+    // ? se è già attivo, disattiva l'autoplay
+    if ( autoplayInterval ){
+        clearInterval(autoplayInterval);
+        autoplayInterval = false;
+    }
+});
+
+
+const invertButtonElement = document.getElementById('invert-button');
+invertButtonElement.addEventListener('click', function(){
+    // ? inverti l'ordine dell'autolpay
+    isAutoplayForward = !isAutoplayForward;
+});
